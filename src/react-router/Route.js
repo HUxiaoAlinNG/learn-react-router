@@ -7,15 +7,23 @@ class Route extends Component {
 
   render() {
     const { history, location } = this.context;
-    const { component: RouteComponent, computedMatch } = this.props;
+    const { component: RouteComponent, computedMatch, render } = this.props;
     const match = computedMatch ? computedMatch : matchPath(location.pathname, this.props);
     let routeProps = { history, location };
     let element = null;
+
     if (match) {
       routeProps.match = match;
-      element = <RouteComponent {...routeProps} />
+      // 优先级 component > render
+      if (RouteComponent) {
+        element = <RouteComponent {...routeProps} />
+      } else if (render) {
+        element = render(routeProps);
+      } else {
+        element = null;
+      }
     }
-    debugger;
+
     return element;
   }
 }
