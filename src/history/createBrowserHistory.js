@@ -11,9 +11,11 @@
     push: ƒ push(path, state)
     replace: ƒ replace(path, state)
  */
-function createBrowserHistory() {
+function createBrowserHistory(props) {
+  let confirm = props.getUserConfirmation ? props.getUserConfirmation() : window.confirm;
   const globalHistory = window.history;
   let listeners = [];
+  let message;
 
   function go(n) {
     globalHistory.go(n);
@@ -44,8 +46,18 @@ function createBrowserHistory() {
     const pState = typeof pathname === "object" ? pathname.state : state;
     const pPathname = typeof pathname === "object" ? pathname.pathname : pathname;
     const location = { state: pState, pathname: pPathname };
+    if (message) {
+      let allow = confirm(message({ pathname }));
+      if (!allow) {
+        return;
+      }
+    }
     globalHistory.pushState(location.state, null, location.pathname);
     setState({ action: "PUSH", location });
+  }
+  function block(newMessage) {
+    message = newMessage;
+    return () => message = null;
   }
   const history = {
     action: "POP",
@@ -55,6 +67,7 @@ function createBrowserHistory() {
     listen,
     location: { pathname: window.location.pathname, state: globalHistory.state },
     push,
+    block,
   }
   return history;
 }
