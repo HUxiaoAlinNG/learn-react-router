@@ -46,10 +46,12 @@ function createHashHistory() {
     goForward,
     push,
     listen,
-    location: { pathname: "/", state: undefined },
+    location: { pathname: window.location.hash.slice(1), state: undefined },
   }
+
   // 截断 # 
   window.location.hash = window.location.hash ? window.location.hash.slice(1) : "/";
+
   return history;
 }
 

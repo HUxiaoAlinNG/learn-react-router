@@ -2,6 +2,11 @@ import { Component } from "react";
 import RouterContext from "./RouterContext";
 
 class Router extends Component {
+  // 根路径
+  static computeRootMatch(pathname) {
+    return { path: "/", url: "/", params: {}, isExact: pathname === "/" };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,6 +25,7 @@ class Router extends Component {
     const value = {//通过value向下层传递数据
       location: this.state.location,
       history: this.props.history,
+      match: Router.computeRootMatch(this.state.location.pathname),
     }
     return (
       <RouterContext.Provider value={value}>

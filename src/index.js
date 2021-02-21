@@ -1,17 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter as Router, Route } from "./react-router-dom";
+import { HashRouter as Router, Link, Redirect, Route, Switch } from "./react-router-dom";
 import Home from "./components/Home";
 import User from "./components/User";
 import Profile from "./components/Profile";
 
 ReactDOM.render(
   <Router>
-    <div>
+    <ul>
+      <li><Link to="/">首页</Link></li>
+      <li><Link to="/user" >用户管理</Link></li>
+      <li><Link to="/profile" >个人中心</Link></li>
+    </ul>
+    <Switch>
       <Route path="/" component={Home} exact />
       <Route path="/user" component={User} />
       <Route path="/profile" component={Profile} />
-    </div>
+      <Redirect to="/" />
+    </Switch>
   </Router>,
   document.getElementById("root")
 );

@@ -5,6 +5,7 @@ import { createHashHistory } from "../history";
 class HashRouter extends Component {
   history = createHashHistory()//hash实现
   render() {
+    debugger;
     console.log("createHashHistory this.history", this.history);
     console.log("createHashHistory this.props", this.props);
     return (

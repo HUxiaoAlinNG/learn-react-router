@@ -1,4 +1,5 @@
 import { Component } from "react";
+import matchPath from "./matchPath";
 import RouterContext from "./RouterContext";
 
 class Route extends Component {
@@ -6,14 +7,15 @@ class Route extends Component {
 
   render() {
     const { history, location } = this.context;
-    const { path, component: RouteComponent } = this.props;
-    const match = location.pathname === path;
+    const { component: RouteComponent, computedMatch } = this.props;
+    const match = computedMatch ? computedMatch : matchPath(location.pathname, this.props);
     let routeProps = { history, location };
     let element = null;
     if (match) {
-      console.log("Route this.context", this.context);
+      routeProps.match = match;
       element = <RouteComponent {...routeProps} />
     }
+    debugger;
     return element;
   }
 }
